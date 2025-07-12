@@ -8,7 +8,7 @@ const Navbar = async () => {
     const session = await auth();
     return (
         <div>
-            <nav>
+            <nav className={"border-2 border-black mb-2"}>
                 <Link href={"/public"}>
                     <Image src={"/logo.png"} alt={"Logo"} width={144} height={30}/>
                 </Link>
