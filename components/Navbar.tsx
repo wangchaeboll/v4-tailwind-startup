@@ -6,10 +6,11 @@ import {Button} from "@/components/ui/button";
 
 const Navbar = async () => {
     const session = await auth();
+    console.log(session)
     return (
         <div>
-            <nav className={"border-2 border-black mb-2"}>
-                <Link href={"/public"}>
+            <nav className={"border-2 border-blue-500 mb-2"}>
+                <Link href={"/"}>
                     <Image src={"/logo.png"} alt={"Logo"} width={144} height={30}/>
                 </Link>
                 <div >
