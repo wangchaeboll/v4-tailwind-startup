@@ -11,31 +11,41 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         //     console.log(params)
         //     return true;
         // },
-        async jwt({ token, account, profile }) {
-            if (account && profile) { // User is available during sign-in
-                const user = await client.fetch(AUTHOR_BY_GITHUB_ID, { id: profile?.id})
-                token.id = user._id
+        async signIn({ user, profile }) {
+            let existingUser = await client.fetch(AUTHOR_BY_GITHUB_ID, {id: profile?.id});
+
+            if (!existingUser) {
+                await writeClient.create({
+                    _type: "author",
+                    id: profile?.id,
+                    name: user?.name,
+                    username: profile?.login,
+                    email: user?.email,
+                    image: user?.image,
+                    bio: profile?.bio || "",
+                });
             }
-            return token
+
+            return true; // don't modify account
+        },
+        async jwt({ token, profile, account }) {
+            // Only run this on first login (account && profile exist)
+            if (account && profile) {
+                const user = await client.fetch(AUTHOR_BY_GITHUB_ID, { id: profile.id });
+
+                if (user) {
+                    token.id = user._id;
+                } else {
+                    token.id = null;
+                }
+            }
+
+            return token;
         },
         async session({ session, token }) {
             Object.assign(session.user, {id: token.id})
             return session
         },
-        async signIn( { user, profile }){
-            const existingUser = await client.fetch(AUTHOR_BY_GITHUB_ID, { id: profile?.id})
-            if(!existingUser){
-                await writeClient.create({
-                    _type : "author",
-                    id: profile?.id,
-                    name:user?.name,
-                    username: profile?.login,
-                    email: user?.email,
-                    image: user?.image,
-                    bio: profile?.bio || ""
-                })
-            }
-            return true
-        }
+
     },
 })
