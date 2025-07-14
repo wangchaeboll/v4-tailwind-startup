@@ -19,7 +19,6 @@ const StartupCard = ( { post } : { post: StartupCardProps} ) => {
         image,
         desc,
     } = post;
-
     return (
         <li>
             <div>
@@ -33,14 +32,14 @@ const StartupCard = ( { post } : { post: StartupCardProps} ) => {
             </div>
             <div>
                 <div>
-                    <Link href={`/user/${author?.id}`}>
+                    <Link href={`/user/${author?._id}`}>
                         <p>{author?.name}</p>
                     </Link>
                     <Link href={`/startup/${_id}`}>
                         <h3>{title}</h3>
                     </Link>
                 </div>
-                <Link href={`/user/${author?.id}`}>
+                <Link href={`/user/${author?._id}`}>
                     <Image width={48} height={48} alt={"placeholder"} src={"https://placehold.co/600x400"}/>
                 </Link>
             </div>

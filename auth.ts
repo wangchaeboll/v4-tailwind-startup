@@ -12,7 +12,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         //     return true;
         // },
         async signIn({ user, profile }) {
-            let existingUser = await client.fetch(AUTHOR_BY_GITHUB_ID, {id: profile?.id});
+            let existingUser = await client.withConfig({useCdn:false}).fetch(AUTHOR_BY_GITHUB_ID, {id: profile?.id});
 
             if (!existingUser) {
                 await writeClient.create({
@@ -26,18 +26,18 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
                 });
             }
 
-            return true; // don't modify account
+            return true;
         },
         async jwt({ token, profile, account }) {
-            // Only run this on first login (account && profile exist)
             if (account && profile) {
-                const user = await client.fetch(AUTHOR_BY_GITHUB_ID, { id: profile.id });
+                const user = await client.withConfig({useCdn:false}).fetch(AUTHOR_BY_GITHUB_ID, { id: profile.id });
 
                 if (user) {
-                    token.id = user._id;
+                    token.id = user?._id;
                 } else {
                     token.id = null;
                 }
+                // token.id = user._id
             }
 
             return token;

@@ -6,7 +6,7 @@ import {Button} from "@/components/ui/button";
 
 const Navbar = async () => {
     const session = await auth();
-    console.log(session)
+    // console.log(session)
     return (
         <div>
             <nav className={"border-2 border-blue-500 mb-2"}>
