@@ -5,6 +5,7 @@ import Image from "next/image";
 import {Button} from "@/components/ui/button";
 import {Author, Startup} from "@/sanity/types";
 import {formatDate} from "@/lib/utils";
+import {Skeleton} from "@/components/ui/skeleton";
 
 export type StartupCardProps = Omit<Startup, "author"> & { author?: Author }
 
@@ -60,4 +61,14 @@ const StartupCard = ( { post } : { post: StartupCardProps} ) => {
         </li>
     )
 }
+
+export const StartupCardSkeleton = () => (
+    <>
+        {[1,2,3,4,5].map((i) => (
+            <div key={i}>
+                <Skeleton/>
+            </div>
+        )) }
+    </>
+)
 export default StartupCard

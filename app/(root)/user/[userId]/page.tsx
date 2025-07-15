@@ -1,9 +1,11 @@
-import React from 'react'
+import React, {Suspense} from 'react'
 import {auth} from "@/auth";
 import {client} from "@/sanity/lib/client";
 import {AUTHOR_BY_ID} from "@/sanity/lib/queries";
 import {notFound} from "next/navigation";
 import Image from "next/image";
+import UserStartUp from "@/components/UserStartUp";
+import {StartupCardSkeleton} from "@/components/StartupCard";
 
 export const experimental_ppr = true
 
@@ -29,7 +31,9 @@ const Page = async ({params}:{params: Promise<{userId: string}>}) => {
                 <div>
                     <p>{session?.user?.id === id ? "Your" : "All"} Startups</p>
                     <ul>
-
+                        <Suspense fallback={<StartupCardSkeleton />}>
+                            <UserStartUp id={id}/>
+                        </Suspense>
                     </ul>
                 </div>
             </section>
